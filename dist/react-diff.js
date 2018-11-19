@@ -1,7 +1,9 @@
 'use strict';
 
-var React = require('react');
 var jsdiff = require('diff');
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 
 var fnMap = {
   'chars': jsdiff.diffChars,
@@ -10,24 +12,17 @@ var fnMap = {
   'json': jsdiff.diffJson
 };
 
-module.exports = React.createClass({
-  displayName: 'Diff',
-
-  getDefaultProps: function getDefaultProps() {
+export default class Diff extends Component {
+  
+  getDefaultProps() {
     return {
       inputA: '',
       inputB: '',
       type: 'chars'
     };
-  },
-
-  propTypes: {
-    inputA: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
-    inputB: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
-    type: React.PropTypes.oneOf(['chars', 'words', 'sentences', 'json'])
-  },
-
-  render: function render() {
+  }
+ 
+  render() {
     var diff = fnMap[this.props.type](this.props.inputA, this.props.inputB);
     var result = diff.map(function (part, index) {
       var spanStyle = {
@@ -45,5 +40,13 @@ module.exports = React.createClass({
       result
     );
   }
-});
+}
+
+
+Diff.proptypes = {
+  inputA: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  inputB: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  type: PropTypes.oneOf(['chars', 'words', 'sentences', 'json'])
+}
+
 
